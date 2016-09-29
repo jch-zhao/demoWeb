@@ -1,5 +1,6 @@
 package com.wsddata.servlet;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -25,19 +26,6 @@ public class Install extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		response.setContentType("text/html");
-		PrintWriter out = response.getWriter();
-		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
-		out.println("<HTML>");
-		out.println("  <HEAD><TITLE>A Servlet</TITLE></HEAD>");
-		out.println("  <BODY>");
-		out.print("    This is ");
-		out.print(this.getClass());
-		out.println(", using the GET method");
-		out.println("  </BODY>");
-		out.println("</HTML>");
-		out.flush();
-		out.close();
 	}
 
 	/**
@@ -52,20 +40,22 @@ public class Install extends HttpServlet {
 	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		response.setContentType("text/html");
-		PrintWriter out = response.getWriter();
-		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
-		out.println("<HTML>");
-		out.println("  <HEAD><TITLE>A Servlet</TITLE></HEAD>");
-		out.println("  <BODY>");
-		out.print("    This is ");
-		out.print(this.getClass());
-		out.println(", using the POST method");
-		out.println("  </BODY>");
-		out.println("</HTML>");
-		out.flush();
-		out.close();
+		String path=getServletContext().getRealPath("/");
+		System.out.println(path);
+		String installFileName=path+"install.html";
+		File file = new File(installFileName);   
+	    // 判断文件是否存在   
+	    if (!file.exists()) {   
+	        response.sendRedirect("../index.html");  
+	    } else {
+	        if (file.isFile()) {
+	        	//执行初始化sql
+	        	
+	        	
+	            file.delete();
+	            response.sendRedirect("../index.html");
+	        }
+	    }
 	}
 
 }

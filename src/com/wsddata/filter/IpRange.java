@@ -8,18 +8,17 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet Filter implementation class Privilege
+ * Servlet Filter implementation class IpRange
  */
-@WebFilter("/inner/*")
-public class Privilege implements Filter {
+@WebFilter("/IpRange")
+public class IpRange implements Filter {
 
     /**
      * Default constructor. 
      */
-    public Privilege() {
+    public IpRange() {
         // TODO Auto-generated constructor stub
     }
 
@@ -36,19 +35,9 @@ public class Privilege implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		// TODO Auto-generated method stub
 		// place your code here
-		
-		String clientIP=request.getRemoteAddr();
-		String serverIP=request.getLocalAddr();
-		
-		System.out.println(clientIP);
-		System.out.println(serverIP);
-		
-		if (!clientIP.equals(serverIP)){
-			HttpServletResponse res = (HttpServletResponse)response;
-			res.setStatus(404);
-		}else{
-			chain.doFilter(request, response);
-		}
+
+		// pass the request along the filter chain
+		chain.doFilter(request, response);
 	}
 
 	/**
@@ -56,7 +45,7 @@ public class Privilege implements Filter {
 	 */
 	public void init(FilterConfig fConfig) throws ServletException {
 		// TODO Auto-generated method stub
-		System.out.println("Privilege filter初始化");
+		System.out.println("IpRange filter 初始化");
 	}
 
 }
