@@ -55,18 +55,42 @@ public class Install extends HttpServlet {
 	        	//执行初始化sql
 	        	String driver = "com.mysql.jdbc.Driver";
 	        	String dbhost="localhost"; //用户端获取
-	        	String dbname="courseware";//用户端获取
-	        	String dbuser="courseware";//用户端获取
-	        	String dbpassword="courseware";//用户端获取
-	        	String url = "jdbc:mysql://"+dbhost+":3306/"+dbname;
+	        	//String dbname="root";//用户端获取
+	        	String dbuser="root";//用户端获取
+	        	String dbpassword="root";//用户端获取
+	        	//String url = "jdbc:mysql://"+dbhost+":3306/"+dbname;
+	        	String url = "jdbc:mysql://"+dbhost+":3306/mysql";
 	        	
 	        	Connection conn = null;
 	        	try {
 	        	       Class.forName(driver); //classLoader,加载对应驱动
 	        	       conn = (Connection) DriverManager.getConnection(url, dbuser, dbpassword);
-	        	       String sql="insert into photo(title,filepath)values('demo8','images/76977.jpg');";
+	        	       String sql="create database keyi character set 'utf8' collate 'utf8_general_ci'";
 	        	       PreparedStatement pstmt = (PreparedStatement)conn.prepareStatement(sql);
 	        	       pstmt.execute();
+	        	       
+	        	       //String sql2= "insert into mysql.User(Host,User,Password) values('localhost','userabc',password('abc'))";
+	        	       String sql2="GRANT USAGE ON *.* TO 'userabc'@'localhost' IDENTIFIED BY 'abc' WITH GRANT OPTION";
+	        	       pstmt = (PreparedStatement)conn.prepareStatement(sql2);
+	        	       pstmt.execute();
+	        	       
+	        	       String sql3="grant all privileges on keyi.* to userabc@localhost identified by 'abc'";
+	        	       pstmt = (PreparedStatement)conn.prepareStatement(sql3);
+	        	       pstmt.execute();
+	        	       
+	        	       String sql4="flush privileges";
+	        	       pstmt = (PreparedStatement)conn.prepareStatement(sql4);
+	        	       pstmt.execute();
+	        	       
+	        	       
+	        	       String sql5="use keyi";
+	        	       pstmt = (PreparedStatement)conn.prepareStatement(sql5);
+	        	       pstmt.execute();
+	        	       
+	        	       String sql6="CREATE TABLE USER (uid int NOT NULL AUTO_INCREMENT,username varchar(50) NOT NULL,password varchar(50),isAdmin int DEFAULT 0,PRIMARY KEY (uid))ENGINE=InnoDB DEFAULT CHARSET=utf8";
+	        	       pstmt = (PreparedStatement)conn.prepareStatement(sql6);
+	        	       pstmt.execute();
+	        	       
 	        	       //ResultSet rs = pstmt.executeQuery();
 	        	   } catch (ClassNotFoundException e) {
 	        	       e.printStackTrace();
