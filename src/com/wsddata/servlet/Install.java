@@ -1,7 +1,11 @@
 package com.wsddata.servlet;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -44,64 +48,103 @@ public class Install extends HttpServlet {
 	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+		
 		String path=getServletContext().getRealPath("/");
 		String installFileName=path+"install.html";
-		File file = new File(installFileName);   
-	    // 判断文件是否存在   
-	    if (!file.exists()) {   
+		String dbFileName=path+"/admin/init/db.sql";
+		String jdbcFileName=path+"/WEB-INF/config/jdbc.properties";
+		File installFile = new File(installFileName);   
+	    //判断文件是否存在   
+	    if (!installFile.exists()) {   
 	        response.sendRedirect("../index.html");  
 	    } else {
-	        if (file.isFile()) {
-	        	//执行初始化sql
+	        if (installFile.isFile()) {
 	        	String driver = "com.mysql.jdbc.Driver";
-	        	String dbhost="localhost"; //用户端获取
-	        	//String dbname="root";//用户端获取
-	        	String dbuser="root";//用户端获取
-	        	String dbpassword="root";//用户端获取
-	        	//String url = "jdbc:mysql://"+dbhost+":3306/"+dbname;
+	        	String dbhost=request.getParameter("dbhost");//表单获取数据库地址，通常是本机
+	        	String dbname=request.getParameter("dbname");//表单获取要创建的数据库名称
+	        	String dbauser=request.getParameter("dbauser");//表单获取dba用户，通常是root
+	        	String dbapassword=request.getParameter("dbapassword");//表单获取dba密码	        	
 	        	String url = "jdbc:mysql://"+dbhost+":3306/mysql";
 	        	
 	        	Connection conn = null;
 	        	try {
-	        	       Class.forName(driver); //classLoader,加载对应驱动
-	        	       conn = (Connection) DriverManager.getConnection(url, dbuser, dbpassword);
-	        	       String sql="create database keyi character set 'utf8' collate 'utf8_general_ci'";
+	        	       Class.forName(driver);
+	        	       conn = (Connection) DriverManager.getConnection(url, dbauser, dbapassword);
+	        	       String sql="create database "+dbname+" character set 'utf8' collate 'utf8_general_ci'";
 	        	       PreparedStatement pstmt = (PreparedStatement)conn.prepareStatement(sql);
 	        	       pstmt.execute();
 	        	       
-	        	       //String sql2= "insert into mysql.User(Host,User,Password) values('localhost','userabc',password('abc'))";
-	        	       String sql2="GRANT USAGE ON *.* TO 'userabc'@'localhost' IDENTIFIED BY 'abc' WITH GRANT OPTION";
+	        	       String usernamme="wsddata";
+	        	       String password="initialization";
+	        	       String sql2="grant all privileges on "+dbname+".* to "+usernamme+"@localhost identified by '"+password+"'";
 	        	       pstmt = (PreparedStatement)conn.prepareStatement(sql2);
 	        	       pstmt.execute();
 	        	       
-	        	       String sql3="grant all privileges on keyi.* to userabc@localhost identified by 'abc'";
+	        	       String sql3="flush privileges";
 	        	       pstmt = (PreparedStatement)conn.prepareStatement(sql3);
 	        	       pstmt.execute();
 	        	       
-	        	       String sql4="flush privileges";
+	        	       String sql4="use "+dbname;
 	        	       pstmt = (PreparedStatement)conn.prepareStatement(sql4);
 	        	       pstmt.execute();
 	        	       
+	        	       //从初始化脚本文件db.sql中读取并执行
+	        	       File dbFile = new File(dbFileName);
+	        	       try(InputStreamReader ir=new InputStreamReader(new FileInputStream(dbFile),"UTF-8");
+	        	    		BufferedReader reader=new BufferedReader(ir)) {
+	        	    	   String tmp;
+	        	    	   while ((tmp = reader.readLine()) != null) {
+	        	    		   if(!tmp.startsWith("--")&&!tmp.equals("")){
+	        	    			   sql4=tmp;
+	        	    			   System.out.println(sql4);
+	        	    			   pstmt = (PreparedStatement)conn.prepareStatement(sql4);
+	        	    			   pstmt.execute();
+	        	    		   }
+	        	    	   }
+	        	    	}catch (IOException e) {
+	        	    		e.printStackTrace();
+	        	    	}
 	        	       
-	        	       String sql5="use keyi";
-	        	       pstmt = (PreparedStatement)conn.prepareStatement(sql5);
-	        	       pstmt.execute();
+	        	       //写入jdbc.properties
+	        	       FileWriter jdbcFile = new FileWriter(jdbcFileName);
+	        	       StringBuffer porperties=new StringBuffer();
+	        	       porperties.append("jdbc.driver="+driver+"\r\n");
+	        	       porperties.append("jdbc.url="+url+"\r\n");
+	        	       porperties.append("jdbc.username="+usernamme+"\r\n");
+	        	       porperties.append("jdbc.password="+password);
+	        	       try{
+	        	    	   jdbcFile.write(porperties.toString());
+	        	    	   jdbcFile.flush();
+	        	    	   jdbcFile.close();
+	        	       }catch(Exception e){
+	        	    	   e.printStackTrace();
+	        	       }
 	        	       
-	        	       String sql6="CREATE TABLE USER (uid int NOT NULL AUTO_INCREMENT,username varchar(50) NOT NULL,password varchar(50),isAdmin int DEFAULT 0,PRIMARY KEY (uid))ENGINE=InnoDB DEFAULT CHARSET=utf8";
-	        	       pstmt = (PreparedStatement)conn.prepareStatement(sql6);
-	        	       pstmt.execute();
-	        	       
-	        	       //ResultSet rs = pstmt.executeQuery();
+	        	       installFile.delete();
+	        	       out.println("<HTML>");
+	        	       out.println("  <HEAD><TITLE>A Servlet</TITLE></HEAD>");
+	        	       out.println("  <BODY>");
+	        	       out.print("    <p>安装成功，请重新启动系统</p> ");
+	        	       out.println("  </BODY>");
+	        	       out.println("</HTML>");
+	        	       out.flush();
+	        	       out.close();
 	        	   } catch (ClassNotFoundException e) {
 	        	       e.printStackTrace();
 	        	   } catch (SQLException e) {
-	        	       e.printStackTrace();
+	        		   out.println("<HTML>");
+	        	       out.println("  <HEAD><TITLE>A Servlet</TITLE></HEAD>");
+	        	       out.println("  <BODY>");
+	        	       out.print("    <p>安装失败，请检查数据库信息是否正确</p> ");
+	        	       out.println("  </BODY>");
+	        	       out.println("</HTML>");
+	        	       out.flush();
+	        	       out.close();
 	        	   }
-	        	
-	            //file.delete();
-	            //response.sendRedirect("../index.html");
 	        }
 	    }
 	}
-
 }
