@@ -4,6 +4,14 @@ public class User {
 	private String username;
 	private String password;
 	private int isAdmin;
+	private String ipRange;
+	
+	public String getIpRange() {
+		return ipRange;
+	}
+	public void setIpRange(String ipRange) {
+		this.ipRange = ipRange;
+	}
 	public String getUsername() {
 		return username;
 	}

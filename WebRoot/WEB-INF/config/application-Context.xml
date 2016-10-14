@@ -50,14 +50,12 @@
     	<property name="dataSource" ref="dataSource"/>
     </bean>
     
-    <!-- 将servlet定义在spring中，和web.xml中的内容保持一致，当然如果用到了mybatis bean，也要作为属性注入 
-    <bean id="InitServlet" class="com.zjc.service.InitServlet"/>
-	
-	
-    <bean id="Test" class="com.zjc.test.UserAccess">
-    	<property name="um" ref="IUserMapper"/>   -->
-    	<!-- 此处引用为spring上下文中的名字，所以不能是类似com.zjc.dao.IUserMapper这样的全限定名 
+    <!-- 将servlet定义在spring中，和web.xml中的内容保持一致，当然如果用到了mybatis bean，也要作为属性注入 -->
+    <bean id="Login" class="com.wsddata.servlet.Login">
+    	<property name="um" ref="IUserMapper"/>
+    	<!-- 此处引用为spring上下文中的名字，所以不能是类似com.zjc.dao.IUserMapper这样的全限定名-->
     </bean>
-    -->
-    
+	
+	
+    <bean id="DownLoad" class="com.wsddata.servlet.DownLoad"/>    
 </beans>

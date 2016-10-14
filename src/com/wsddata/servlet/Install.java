@@ -66,13 +66,14 @@ public class Install extends HttpServlet {
 	        	String dbhost=request.getParameter("dbhost");//表单获取数据库地址，通常是本机
 	        	String dbname=request.getParameter("dbname");//表单获取要创建的数据库名称
 	        	String dbauser=request.getParameter("dbauser");//表单获取dba用户，通常是root
-	        	String dbapassword=request.getParameter("dbapassword");//表单获取dba密码	        	
-	        	String url = "jdbc:mysql://"+dbhost+":3306/mysql";
+	        	String dbapassword=request.getParameter("dbapassword");//表单获取dba密码
+	        	String rooturl = "jdbc:mysql://"+dbhost+":3306/mysql";
+	        	String cfgurl = "jdbc:mysql://"+dbhost+":3306/"+dbname;
 	        	
 	        	Connection conn = null;
 	        	try {
 	        	       Class.forName(driver);
-	        	       conn = (Connection) DriverManager.getConnection(url, dbauser, dbapassword);
+	        	       conn = (Connection) DriverManager.getConnection(rooturl, dbauser, dbapassword);
 	        	       String sql="create database "+dbname+" character set 'utf8' collate 'utf8_general_ci'";
 	        	       PreparedStatement pstmt = (PreparedStatement)conn.prepareStatement(sql);
 	        	       pstmt.execute();
@@ -112,7 +113,7 @@ public class Install extends HttpServlet {
 	        	       FileWriter jdbcFile = new FileWriter(jdbcFileName);
 	        	       StringBuffer porperties=new StringBuffer();
 	        	       porperties.append("jdbc.driver="+driver+"\r\n");
-	        	       porperties.append("jdbc.url="+url+"\r\n");
+	        	       porperties.append("jdbc.url="+cfgurl+"\r\n");
 	        	       porperties.append("jdbc.username="+usernamme+"\r\n");
 	        	       porperties.append("jdbc.password="+password);
 	        	       try{
