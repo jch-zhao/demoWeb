@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.wsddata.bean.User;
 import net.sf.json.JSONArray;
 
-@WebServlet("/GetSession")
+@WebServlet("/whoami")
 public class GetSession extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -23,9 +23,11 @@ public class GetSession extends HttpServlet {
 		response.setContentType("application/json;charset=utf-8");
 		PrintWriter out = response.getWriter();
 		User u=(User) request.getSession().getAttribute("user");
-		JSONArray ja=JSONArray.fromObject(u);
-		out.append(ja.toString());
-		out.flush();
+		if(u!=null){
+			JSONArray ja=JSONArray.fromObject(u);
+			out.append(ja.toString());
+			out.flush();
+		}
 		out.close();
 	}
 
