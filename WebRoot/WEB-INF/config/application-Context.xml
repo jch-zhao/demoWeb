@@ -9,8 +9,7 @@
                 http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
 		http://www.springframework.org/schema/context 
                 http://www.springframework.org/schema/context/spring-context-4.1.xsd">
-                
-    <!-- 引用属性文件，也可以不用属性文件直接写在这。但个人认为属性文件还是必要的，直接修改这个文件是不易懂的 -->
+
     <context:property-placeholder location="WEB-INF/config/jdbc.properties"/>
     
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -21,41 +20,22 @@
     </bean>
     
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-    	<!-- 引用上面的数据源 -->
     	<property name="dataSource" ref="dataSource"/>
-    	<!-- 指定mybatis核心配置文件  --> 
     	<property name="configLocation" value="WEB-INF/config/mybatis.xml"/>
-    	<!-- 指定所有mapper映射文件 *.xml位置，自动查找 -->
     	<property name="mapperLocations" value="classpath*:com/wsddata/dao/*.xml"/>
     </bean>
-    
-    <!-- 自动扫描接口（mapper）文件，生成代理类对象，并加入到spring上下文中。
-    !bean id就是接口名称，且自动与*.xml中的映射语句关联起来。与xml的文件名无关。接口前需要加入@Repository注解 -->
+
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
     	<property name="basePackage" value="com.wsddata.dao"/>
-    	
-    	<!-- 本来从逻辑上说，此处还应该再加一个sqlSessionFactory属性的引用，但只要加了就会导致jdbc.properties引用值不正确。在只有一个数据源的情况下，不加这一句反倒不会出错，于是省略。 
-    	!如加上此句：property name="annotationClass" value="org.springframework.stereotype.Repository" 表示只有被@Repository注解的接口才被扫描，不加表示扫描全部，故省略。
-    	!设置自动扫描对Mapper的命名有要求，不能以单个大写字母开头, 各种例子中都未见此说明，WTF!
-    	-->
     </bean>
-    <!--有了上面的自动扫描，就无需逐个手工定义Mapper bean了，以下是手工定义的例子
-     <bean id="userMapper" class="com.zjc.bean.User">
-		<property name="mapperInterface" value="com.zjc.dao.IUserMapper"/>
-		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
-     -->
-    
-    <!-- 使用spring事务管理 -->
+
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
     	<property name="dataSource" ref="dataSource"/>
     </bean>
-    
-    <!-- 将servlet定义在spring中，和web.xml中的内容保持一致，当然如果用到了mybatis bean，也要作为属性注入 -->
+
     <bean id="Login" class="com.wsddata.servlet.Login">
     	<property name="um" ref="IUserMapper"/>
-    	<!-- 此处引用为spring上下文中的名字，所以不能是类似com.zjc.dao.IUserMapper这样的全限定名-->
     </bean>
-	
 	
     <bean id="DownLoad" class="com.wsddata.servlet.DownLoad"/>    
 </beans>

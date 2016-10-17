@@ -2,18 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.wsddata.dao.IUserMapper">
+ 
 	<resultMap id="Users" type="User">
+	<!--  
 		<id column="uid" property="uid" />
 		<result column="username" property="userName" />
-		<result column="password" property="passWord" />
 		<result column="isAdmin" property="isAdmin" />
+		<result column="ipRange" property="ipRange" />
+	-->
 	</resultMap>
+
 	<select id="allUsers" resultMap="Users">
         select * from `user`
     </select>
 
 	<select id="selectUserByNameAndPassword" resultType="User">
-		select * from `user` where username=#{0} and password=#{1}
+		select * from `user` where username=#{0} and password=password(#{1})
 	</select>
 	<select id="selectUserByID" resultType="User">
 		select * from `user` where uid=#{id}
@@ -23,11 +27,11 @@
 	</select>
 	
     <insert id="addUser" parameterType="User" useGeneratedKeys="true" keyProperty="uid">
-    	insert into user(userName,password,isadmin)values(#{userName},#{passWord},#{isAdmin})
+    	insert into user(userName,password,isadmin)values(#{userName},password(#{passWord}),#{isAdmin})
     </insert>
     
     <update id="modifyUser" parameterType="User">
-    	update user set userName=#{userName},password=#{passWord},isAdmin=#{isAdmin} where uid=#{uid}
+    	update user set userName=#{userName},password=password(#{passWord}),isAdmin=#{isAdmin} where uid=#{uid}
     </update>
     	
     <delete id="deleteByID" parameterType="int">delete from `user` where uid = #{uid}</delete>

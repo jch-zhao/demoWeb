@@ -1,7 +1,6 @@
 package com.wsddata.dao;
 
 import java.util.List;
-import org.springframework.transaction.annotation.Transactional;
 import com.wsddata.bean.*;
 
 public interface IUserMapper {

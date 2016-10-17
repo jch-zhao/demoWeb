@@ -1,24 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-	
-	<!-- 通知mybatis，日志系统是什么 -->
 	<settings>
     	<setting name="logImpl" value="LOG4J"/>
     </settings>
-    
-    <!-- 定义mybatis使用的别名,映射文件*.xml中所用的名称依赖于此 -->
 	<typeAliases>
-		<!-- 
-		<typeAlias alias="User" type="com.zjc.bean.User"/>  
-		此处为手工逐个定义方法，也可用下面扫描目录的方法，但需要在bean类中加入类似@Alias("User")这样的注解-->
-		
 		<package name="com.wsddata.bean"/>
 	</typeAliases>
-	
-	<!-- 使用spring自动扫描时，就需要把这段手工创建的映射关掉，否则冲突
-    <mappers>
-    	<mapper resource="com/wsddata/bean/User.xml"/>
-    </mappers>
-     -->
 </configuration>
