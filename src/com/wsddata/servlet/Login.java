@@ -7,17 +7,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.catalina.SessionListener;
 import org.apache.log4j.Logger;
-import com.wsddata.dao.IUserMapper;
+import com.wsddata.dao.UserMapper;
 import com.wsddata.bean.User;
 
 public class Login extends HttpServlet {
-	private IUserMapper user;
+	private UserMapper user;
 
-	public IUserMapper getUm() {
+	public UserMapper getUm() {
 		return user;
 	}
 
-	public void setUm(IUserMapper um) {
+	public void setUm(UserMapper um) {
 		this.user = um;
 	}
 

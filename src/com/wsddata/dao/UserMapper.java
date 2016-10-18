@@ -3,7 +3,7 @@ package com.wsddata.dao;
 import java.util.List;
 import com.wsddata.bean.*;
 
-public interface IUserMapper {
+public interface UserMapper {
 	public User selectUserByNameAndPassword(String username,String password);
 	public User selectUserByID(int id);
 	public User selectUserByName(String name);

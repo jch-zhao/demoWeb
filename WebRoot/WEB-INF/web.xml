@@ -16,26 +16,27 @@
     <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
   </listener>
   
+  <!-- 只有需要作为bean注入到spring里才在这里定义，且类名都指向com.wsddata.servlet.SpringServlet ，其他普通servlet均用注解方式，减少xml长度 -->
   <servlet>
     <servlet-name>SpringServlet</servlet-name>
     <servlet-class>com.wsddata.servlet.SpringServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>DownLoad</servlet-name>
+    <servlet-name>download</servlet-name>
     <servlet-class>com.wsddata.servlet.SpringServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>Login</servlet-name>
+    <servlet-name>login</servlet-name>
     <servlet-class>com.wsddata.servlet.SpringServlet</servlet-class>
   </servlet>
  
   <servlet-mapping>
-    <servlet-name>DownLoad</servlet-name>
-    <url-pattern>/download/DownLoad</url-pattern>
+    <servlet-name>download</servlet-name>
+    <url-pattern>/download/download</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>Login</servlet-name>
-    <url-pattern>/Login</url-pattern>
+    <servlet-name>login</servlet-name>
+    <url-pattern>/login</url-pattern>
   </servlet-mapping>
 
 
