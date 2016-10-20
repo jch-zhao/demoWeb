@@ -54,10 +54,10 @@ public class IpRange implements Filter {
 			if(judgeIP(clientIP,permitIP)){
 				chain.doFilter(request, response);
 			}else{
-				resp.sendRedirect("../iperror.html");
+				resp.sendRedirect("../error/iperror.html");
 			}
 		}else{
-			resp.sendRedirect("../iperror.html");
+			resp.sendRedirect("../error/iperror.html");
 		}
 		
 	}

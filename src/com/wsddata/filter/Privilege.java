@@ -50,7 +50,7 @@ public class Privilege implements Filter {
 		if (u.getIsAdmin()==1){
 			chain.doFilter(request, response);
 		}else{
-			resp.sendRedirect("../privilegeerror.html");
+			resp.sendRedirect("../error/privilegeerror.html");
 		}
 	}
 
