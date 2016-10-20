@@ -14,7 +14,7 @@
         </commentGenerator>
 
 		<!--数据库链接URL，用户名、密码 -->
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost/wsddata_test" userId="wsddata" password="initialization">
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost/wsddata_example" userId="wsddata" password="initialization">
         </jdbcConnection>
 
         <javaTypeResolver>
@@ -35,9 +35,10 @@
 		<!-- 生成DAO的包名和位置-->
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.wsddata.dao" targetProject="../src">
             <property name="enableSubPackages" value="true"/>
+			<property name="rootInterface" value="com.wsddata.dao.SearchBaseDao"/>
         </javaClientGenerator>
 
 		<!-- 要生成哪些表-->
-        <table tableName="article" domainObjectName="IArticle" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="article" domainObjectName="Article" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false" enableInsert="false" enableDeleteByPrimaryKey="false" enableUpdateByPrimaryKey="false"></table>
     </context>
 </generatorConfiguration>
