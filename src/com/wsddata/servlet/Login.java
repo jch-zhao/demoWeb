@@ -5,21 +5,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.catalina.SessionListener;
-import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.wsddata.dao.UserMapper;
 import com.wsddata.bean.User;
 
 public class Login extends HttpServlet {
+	@Autowired
 	private UserMapper user;
-
-	public UserMapper getUm() {
-		return user;
-	}
-
-	public void setUm(UserMapper um) {
-		this.user = um;
-	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

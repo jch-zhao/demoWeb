@@ -33,9 +33,7 @@
     	<property name="dataSource" ref="dataSource"/>
     </bean>
 
-    <bean id="login" class="com.wsddata.servlet.Login">
-    	<property name="um" ref="userMapper"/>
-    </bean>
+    <bean id="login" class="com.wsddata.servlet.Login"/>
 	
     <bean id="download" class="com.wsddata.servlet.DownLoad"/>    
 </beans>
