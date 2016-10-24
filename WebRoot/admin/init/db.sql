@@ -20,7 +20,7 @@
 CREATE TABLE USER (uid int NOT NULL AUTO_INCREMENT,username varchar(50) NOT NULL,password varchar(50),isAdmin int DEFAULT 0,ipRange varchar(200) DEFAULT '*',PRIMARY KEY (uid))ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --创建用户
-insert into user(username,password,isadmin)values('admin','admin',1);
-insert into user(username,password,isadmin,iprange)values('zhangsan','123456',0,'202.106.1.1-202.106.127.255');
+insert into user(username,password,isadmin)values('admin',password('admin'),1);
+insert into user(username,password,isadmin,iprange)values('zhangsan',password('123456'),0,'202.106.1.1-202.106.127.255');
 
 --其他初始化语句
